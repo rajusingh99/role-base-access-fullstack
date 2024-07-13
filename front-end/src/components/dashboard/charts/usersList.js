@@ -4,6 +4,7 @@ import Users from '../Pages/Admin/User/user';
 import SideBar from '../sidebar';
 import TopRoutes from '../Pages/Admin/TopRoutes/TopRoutes';
 import Constant from '../../constant/Constant';
+import CopyRight from '../Pages/Admin/components/CopyRight';
 
 const UserList = () => {
   const [data, setData] = useState(Constant.rows)
@@ -26,6 +27,7 @@ const UserList = () => {
         </Paper>
       </Grid>
     </Grid>
+        <CopyRight/>
   </Box>;
   return (
     <Box sx={{display:'flex'}}>

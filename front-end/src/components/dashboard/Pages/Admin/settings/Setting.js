@@ -3,6 +3,7 @@ import React from 'react'
 import NotFound from '../../../../Common/NotFound'
 import SideBar from '../../../sidebar'
 import TopRoutes from '../TopRoutes/TopRoutes'
+import CopyRight from '../components/CopyRight';
 
 const Setting = () => {
     const route ={
@@ -15,6 +16,7 @@ const Setting = () => {
             <TopRoutes route={route}/>
          </Box>
         <NotFound text="Setting"/>
+        <CopyRight/>
     </Grid>
   )
 }

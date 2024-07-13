@@ -1,9 +1,10 @@
 
 const express = require('express');
-const cors = require('cors');
-const { dbConnect } = require('./src/Config/db');
+const cors = require('cors')
+const { dbConnect } = require('./src/config/db');
 const authRoute = require('./src/Routes/auth');
-const scenarioRoute = require('./src/Routes/scenario');
+const roleRoute = require("./src/Routes/role")
+const userRoute = require("./src/Routes/user")
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
@@ -32,7 +33,9 @@ app.get('/', (req, res) => {
 
 // Routes
 app.use('/api', authRoute);
-app.use('/api', scenarioRoute);
+app.use('/api', roleRoute );
+app.use('/api', userRoute );
+
 
 // Start server
 app.listen(port, () => {
