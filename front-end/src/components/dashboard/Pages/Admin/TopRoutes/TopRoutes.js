@@ -69,7 +69,7 @@ const TopRoutes = ({ route }) => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.post('http://localhost:4000/api/roles/create', roleData, {
+      const response = await axios.post('http://localhost:4000/api/role-create', roleData, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,

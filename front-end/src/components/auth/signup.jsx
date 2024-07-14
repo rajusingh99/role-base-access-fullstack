@@ -9,6 +9,7 @@ import {
   Button,
   IconButton,
   Grid,
+  CircularProgress,
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -21,6 +22,7 @@ import CopyRight from "../dashboard/Pages/Admin/components/CopyRight";
 const Signup = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -36,21 +38,24 @@ const Signup = () => {
   }, []);
 
   const handleSignUp = async (e) => {
+    setLoading(true)
     e.preventDefault();
     try {
       const response = await axios.post(
         "http://localhost:4000/api/register",
         formData
       );
-      console.log("response::", response);
-      console.log(response.data);
+      console.log("response::", response.data);
       if (response.status === 200) {
-        navigate("/library");
+        setLoading(false)
+        navigate("/login");
       } else {
+        setLoading(false)
         console.error("Registration failed:", response.data);
         alert("Registration failed: " + response.data.message);
       }
     } catch (error) {
+      setLoading(false)
       console.error("An error occurred:", error);
       alert("An error occurred. Please try again.");
     }
@@ -71,9 +76,9 @@ const Signup = () => {
           sx={{
             minHeight: "93vh",
             backgroundRepeat: "no-repeat",
-            backgroundPosition: "50% 0",
             backgroundSize: "cover",
             display: "flex",
+            backgroundPosition: "50% 0",
             justifyContent: "center",
             alignItems: "center",
             position: "relative",
@@ -89,6 +94,7 @@ const Signup = () => {
               zIndex: "1",
             }}
           >
+             {loading && <CircularProgress />}
             <Stack spacing={2}>
               <Typography
                 align="center"

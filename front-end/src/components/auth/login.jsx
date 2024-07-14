@@ -37,11 +37,10 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:4000/api/login", {
-        email: formData.email,
-        password: formData.password,
+       email  : formData.email,
+       password: formData.password
       });
       const token = localStorage.setItem("token", response.data.token);
-      console.log("Token::", token);
       if (response.status === 200) {
         navigate("/");
       } else {

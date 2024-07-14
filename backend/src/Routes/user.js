@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.put('/update-user-role', auth, updateUserRole);
 
-router.get('user-list', auth, getAllUserList);
+router.get('/user-list', auth, getAllUserList);
 
 
 

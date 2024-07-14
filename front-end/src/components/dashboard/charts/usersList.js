@@ -9,10 +9,6 @@ import CopyRight from '../Pages/Admin/components/CopyRight';
 const UserList = () => {
   const [data, setData] = useState(Constant.rows)
  
-  useEffect(()=>{
-     
-  },[])
-  
   const route = {
     title: "Users",
   };

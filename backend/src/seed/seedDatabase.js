@@ -30,11 +30,11 @@ const seedDatabase = async () => {
         const [superAdminRole, userRole] = await Role.insertMany(roles);
 
         // Create SuperAdmin user
-        const hashedPassword = await bcrypt.hash('superAdminpassword', 10); // Replace with a secure password
+        const hashedPassword = await bcrypt.hash('superAdminpassword', 10); 
         const superAdmin = new User({
             firstName: 'Super',
             lastName: 'Admin',
-            email: 'superadmin@example.com', // Replace with the desired superadmin email
+            email: 'superadmin@example.com', 
             password: hashedPassword,
             role: superAdminRole._id
         });

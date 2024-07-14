@@ -1,15 +1,18 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const { v4: uuidv4 } = require("uuid");
 
 const roleSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    menus: [{
-        type: String,
-        required: true,
-    }]
+	_id: { type: String, default: uuidv4 },
+	name: {
+		type: String,
+		unique: true,
+	},
+	menus: [
+		{
+			type: String,
+			required: true,
+		},
+	],
 });
 
-module.exports = mongoose.model('Role', roleSchema);
+module.exports = mongoose.model("Role", roleSchema);

@@ -5,11 +5,11 @@ const { createRole, updateRole, getAllRoleList } = require("../Controllers/role"
 const router = express.Router();
 
 
-router.get("/create",auth, createRole);
+router.post("/role-create",auth, createRole);
 
 router.put('/update-role', auth, updateRole);
 
-router.get('role-list', auth, getAllRoleList);
+router.get('/role-list', auth, getAllRoleList);
 
 
 

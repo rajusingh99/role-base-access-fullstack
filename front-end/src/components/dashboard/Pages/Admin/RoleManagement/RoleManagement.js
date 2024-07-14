@@ -9,11 +9,8 @@ import CopyRight from '../components/CopyRight';
 import RoleList from './components/RoleList';
 
 const RoleManagement = () => {
-  const [sort, setSort] = useState('');
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(6);
-  const [scenarios, setScenarios] = useState([]);
-
+  const [Role, setRoles] = useState([]);
+  console.log(Role,'Role')
   const route = {
     title: "Roles",
   };
@@ -21,10 +18,10 @@ const RoleManagement = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/scenario');
-        setScenarios(response.data);
+        const response = await axios.get('http://localhost:4000/api/role-list');
+        setRoles(response.data);
       } catch (error) {
-        console.error('Error fetching scenarios:', error);
+        console.error('Error fetching Role:', error);
       }
     };
 
