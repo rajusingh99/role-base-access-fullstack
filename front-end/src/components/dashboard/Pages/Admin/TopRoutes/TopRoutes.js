@@ -62,7 +62,6 @@ const TopRoutes = ({ route }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData)
     const roleData = {
       ...formData,
     };

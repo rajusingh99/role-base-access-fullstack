@@ -9,24 +9,11 @@ import CopyRight from '../components/CopyRight';
 import RoleList from './components/RoleList';
 
 const RoleManagement = () => {
-  const [Role, setRoles] = useState([]);
-  console.log(Role,'Role')
+ 
   const route = {
     title: "Roles",
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://localhost:4000/api/role-list');
-        setRoles(response.data);
-      } catch (error) {
-        console.error('Error fetching Role:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <Box sx={{ display: 'flex' }}>

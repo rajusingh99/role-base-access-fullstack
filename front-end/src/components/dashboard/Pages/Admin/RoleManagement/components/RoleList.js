@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Select, MenuItem, Button, TextField, FormControl, InputLabel, Chip, OutlinedInput } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import { useTheme } from '@mui/material/styles';
-import {sidebarLinks} from "../../../../../constant/sidebarLinks";
+import axios from "axios";
 import '../style.css'
 
 const ITEM_HEIGHT = 50;
@@ -33,6 +32,9 @@ const RoleList = ({ rows }) => {
   const [editId, setEditId] = useState(null);
   const [editRole, setEditRole] = useState([]);
   const [editName, setEditName] = useState("");
+  const [roles, setRoles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const handleEditClick = (id, currentName, currentRole) => {
     setEditId(id);
@@ -51,9 +53,33 @@ const RoleList = ({ rows }) => {
     setEditName(event.target.value);
   };
 
-  const handleSave = (id) => {
-    console.log(`Save changes for role with ID: ${id}, new name: ${editName}, and new menus: ${editRole}`);
-    setEditId(null);
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.put(
+        "http://localhost:4000/api/update-role",
+        { id: editId, name: editName, menus: editRole },
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          }
+        }
+      );
+      if (response.status === 200) {
+        const updatedRoles = roles.map(role =>
+          role._id === editId ? { ...role, name: editName, menus: editRole } : role
+        );
+        setRoles(updatedRoles);
+        setEditId(null);
+      } else {
+        console.error("Failed to update role:", response.data);
+        alert("Failed to update role.");
+      }
+    } catch (error) {
+      console.error("An error occurred while updating the role:", error);
+      alert("An error occurred. Please try again.");
+    }
   };
 
   const handleCancel = () => {
@@ -61,72 +87,65 @@ const RoleList = ({ rows }) => {
   };
 
   const columns = [
-    { field: "id", headerName: "ID", flex: 10 },
-    { field: "name", headerName: "Name", flex: 10, renderCell: (params) => (
-        editId === params.row.id ? (
+    { field: "_id", headerName: "ID", flex: 1 },
+    {
+      field: "name", headerName: "Name", flex: 1, renderCell: (params) => (
+        editId === params.row._id ? (
           <TextField value={editName} onChange={handleNameChange} />
         ) : (
           params.value
         )
       )
     },
-    { field: "menus", headerName: "Menus", flex: 20, renderCell: (params) => (
-        editId === params.row.id ? (
+    {
+      field: "menus", headerName: "Menus", flex: 2, renderCell: (params) => (
+        editId === params.row._id ? (
           <FormControl sx={{ m: 1, width: 300 }}>
             <InputLabel id="demo-multiple-chip-label">Menus</InputLabel>
             <Select
-              sx={{ }}
               labelId="demo-multiple-chip-label"
               id="demo-multiple-chip"
               multiple
               value={editRole}
               onChange={handleRoleChange}
-              input={<OutlinedInput id="select-multiple-chip"  />}
+              input={<OutlinedInput id="select-multiple-chip" />}
               renderValue={(selected) => (
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, }}>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                   {selected.map((value) => (
                     <Chip key={value} label={value} />
-                    ))}
+                  ))}
                 </Box>
               )}
               MenuProps={MenuProps}
             >
-              {sidebarLinks.map((role) => (
+              {params.row.menus.map((role) => (
                 <MenuItem
-                key={role.title}
-                value={role.value}
-                style={getStyles(role.title, editRole, theme)}
+                  key={role}
+                  value={role}
+                  style={getStyles(role, editRole, theme)}
+                  sx={{ textTransform: 'capitalize' }}
                 >
-                  {role.title}
+                  {role}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
         ) : (
-          
-          <>
-           {
-            params.value.map((item,key)=>
-               <Chip key={key} label={item} />            
-        
-            )
-           }         
-          </>
-
-          
+          params.row.menus.map((item, key) =>
+            <Chip key={key} label={item} sx={{ textTransform: 'capitalize' }} />
+          )
         )
-        
       )
     },
     {
       field: "action",
       headerName: "Action",
-      flex: 10,
+      flex: 1,
       renderCell: (params) => (
         <Box sx={{ marginTop: '5px', gap: "20px", display: 'flex' }}>
-          {editId === params.row.id ? (
+          {editId === params.row._id ? (
             <>
-              <Button variant="contained" onClick={() => handleSave(params.row.id)}>
+              <Button variant="contained" onClick={() => handleSave()}>
                 Save
               </Button>
               <Button variant="contained" color="error" onClick={handleCancel}>
@@ -135,12 +154,9 @@ const RoleList = ({ rows }) => {
             </>
           ) : (
             <>
-              <IconButton color="primary" aria-label="edit" onClick={() => handleEditClick(params.row.id, params.row.name, params.row.menus)}>
+              <IconButton color="primary" aria-label="edit" onClick={() => handleEditClick(params.row._id, params.row.name, params.row.menus)}>
                 <EditIcon />
               </IconButton>
-              {/* <IconButton color="error" aria-label="delete">
-                <DeleteIcon />
-              </IconButton> */}
             </>
           )}
         </Box>
@@ -148,10 +164,40 @@ const RoleList = ({ rows }) => {
     },
   ];
 
+  useEffect(() => {
+    const fetchRoleList = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get("http://localhost:4000/api/role-list", {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const dataWithId = response.data.roles.map((role) => ({ ...role, id: role._id }));
+        setRoles(dataWithId);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching role data:', error);
+        setError(error);
+        setLoading(false);
+      }
+    };
+
+    fetchRoleList();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <Box mt={'15px'}>
       <DataGrid
-        rows={rows}
+        rows={roles}
         columns={columns}
         pageSize={5}
         rowsPerPageOptions={[5, 10, 20]}
@@ -167,3 +213,4 @@ const RoleList = ({ rows }) => {
 };
 
 export default RoleList;
+

@@ -15,7 +15,6 @@ exports.auth = async (req, res, next) => {
     }
     try {
       const decode = jwt.verify(token, process.env.JWT_SECRET);
-      console.log("Decode", decode);
       req.id = decode.id;
     } catch (err) {
       return res.status(401).json({

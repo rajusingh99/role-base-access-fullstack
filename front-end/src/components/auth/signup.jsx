@@ -45,7 +45,6 @@ const Signup = () => {
         "http://localhost:4000/api/register",
         formData
       );
-      console.log("response::", response.data);
       if (response.status === 200) {
         setLoading(false)
         navigate("/login");
