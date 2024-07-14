@@ -1,7 +1,7 @@
 
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect, useMemo } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Select, MenuItem, Button } from "@mui/material";
+import { Box, Select, MenuItem, Button, CircularProgress } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import axios from "axios";
@@ -57,7 +57,7 @@ const Users = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <CircularProgress/>;
   }
 
   if (error) {
@@ -120,7 +120,7 @@ const Users = () => {
          { editId === params.row.id ? (
               <Select value={editRole} onChange={handleRoleChange}>
                 {
-                RoleList &&  RoleList.map((item)=> 
+               RoleList && RoleList.map((item)=> 
                   <MenuItem value={item.name} sx={{ textTransform: "capitalize" }}>{item.name}</MenuItem>
                   )
                 }

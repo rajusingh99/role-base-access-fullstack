@@ -13,7 +13,7 @@ const RoleManagement = () => {
   const route = {
     title: "Roles",
   };
-
+  
 
   return (
     <Box sx={{ display: 'flex' }}>

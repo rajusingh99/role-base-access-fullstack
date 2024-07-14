@@ -15,6 +15,9 @@ import Footer from './components/Common/Footer';
 import Chat from './components/dashboard/Pages/Admin/chats/Chat';
 import Setting from './components/dashboard/Pages/Admin/settings/Setting';
 const App = () => {
+
+  const token = localStorage.getItem("token");
+
   return (
     <div className="App">
         <Routes>

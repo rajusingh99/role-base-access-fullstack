@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Select, MenuItem, Button, TextField, FormControl, InputLabel, Chip, OutlinedInput } from "@mui/material";
+import { Box, Select, MenuItem, Button, TextField, FormControl, InputLabel, Chip, OutlinedInput, CircularProgress } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import { useTheme } from '@mui/material/styles';
 import axios from "axios";
 import '../style.css'
+import { sidebarLinks } from "../../../../../constant/sidebarLinks";
 
 const ITEM_HEIGHT = 50;
 const ITEM_PADDING_TOP = 10;
@@ -112,20 +113,20 @@ const RoleList = ({ rows }) => {
               renderValue={(selected) => (
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                   {selected.map((value) => (
-                    <Chip key={value} label={value} />
+                    <Chip key={value} label={value} sx={{textTransform:"capitalize"}}/>
                   ))}
                 </Box>
               )}
               MenuProps={MenuProps}
             >
-              {params.row.menus.map((role) => (
+              {sidebarLinks.map((role) => (
                 <MenuItem
                   key={role}
-                  value={role}
-                  style={getStyles(role, editRole, theme)}
+                  value={role.value}
+                  style={getStyles(role.value, editRole, theme)}
                   sx={{ textTransform: 'capitalize' }}
                 >
-                  {role}
+                  {role.value}
                 </MenuItem>
               ))}
             </Select>
@@ -173,6 +174,7 @@ const RoleList = ({ rows }) => {
             'Authorization': `Bearer ${token}`
           }
         });
+        console.log(response,'response')
         const dataWithId = response.data.roles.map((role) => ({ ...role, id: role._id }));
         setRoles(dataWithId);
         setLoading(false);
@@ -187,7 +189,7 @@ const RoleList = ({ rows }) => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <CircularProgress color="success"/>;
   }
 
   if (error) {
