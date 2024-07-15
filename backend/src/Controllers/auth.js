@@ -96,7 +96,7 @@ exports.login = async (req, res) => {
             role: role ? role?.name : null,
             menus: role ? role?.menus : null,
           }
-				});
+		});
 		} else {
 			return res.status(401).json({
 				success: false,
