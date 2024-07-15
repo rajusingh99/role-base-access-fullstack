@@ -20,18 +20,23 @@ exports.register = async (req, res) => {
 		const hashedPassword = await bcrypt.hash(password, 10);
 		const userRoleId = await Role.findOne({ name: "user" }, { _id: 1 });
 
-		user = new User({
-			firstName,
-			lastName,
-			email,
-			password: hashedPassword,
-			roleId: userRoleId,
-		});
+		if(userRoleId){
+			user = new User({
+				firstName,
+				lastName,
+				email,
+				password: hashedPassword,
+				roleId: userRoleId,
+			});
 
-		const savedUser = await user.save();
-
-		if (savedUser) {
-			res.status(200).send("User Registered Successfully!");
+			const savedUser = await user.save();
+	
+			if (savedUser) {
+				res.status(200).send("User Registered Successfully!");
+			}
+		}
+		else{
+			res.status(500).send("User role not exist!");
 		}
 	} catch (err) {
 		console.error(err.message);
