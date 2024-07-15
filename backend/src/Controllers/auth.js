@@ -19,7 +19,9 @@ exports.register = async (req, res) => {
 
 		const hashedPassword = await bcrypt.hash(password, 10);
 		const userRoleId = await Role.findOne({ name: "user" }, { _id: 1 });
-
+		if(!userRoleId){
+			return res.status(400).send("User Role is not Created in our system!")
+		}
 		user = new User({
 			firstName,
 			lastName,
