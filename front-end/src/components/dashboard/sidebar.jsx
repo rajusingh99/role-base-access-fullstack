@@ -175,7 +175,7 @@ export default function SideBar() {
             </IconButton>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Raju" src="/static/images/avatar/2.jpg" />
+                <Avatar alt={LoggedInUser.firstName} src="/static/images/avatar/2.jpg" sx={{textTransform:'capitalize'}}/>
               </IconButton>
             </Tooltip>
             <Menu
