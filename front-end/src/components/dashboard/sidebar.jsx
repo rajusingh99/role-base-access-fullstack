@@ -1,4 +1,4 @@
-import React from "react";
+import React  from "react";
 import axios from "axios";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -96,6 +96,10 @@ export default function SideBar() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
+ const LoggedInUser = JSON.parse(localStorage.getItem("LoggedInUser"))
+  const menus = LoggedInUser.menus;
+
+  const filteredItems = sidebarLinks.filter(item => menus.includes(item.value));
 
   const navigate = useNavigate();
 
@@ -110,7 +114,7 @@ export default function SideBar() {
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-  // const token=
+  
   const handleCloseUserMenu = async (path) => {
     if (path === "/dashboard/logout") {
       try {
@@ -218,7 +222,7 @@ export default function SideBar() {
         <Divider />
         <Box className="sidebar-links">
           <List>
-            {sidebarLinks.map((link, index) => (
+            {filteredItems?.map((link, index) => (
               <SidebarItems
                 link={link}
                 navigate={navigate}

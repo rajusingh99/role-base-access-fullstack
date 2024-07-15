@@ -38,13 +38,13 @@ const App = () => {
         <Route path='/forgot-password' element={<PublicRoute element={ForgotPassword} />} />
         <Route path='/update-password' element={<PublicRoute element={UpdatePassword} />} />
 
-        <Route path='/users' element={<ProtectedRoute element={UserList} />} />
-        <Route path='/roles' element={<ProtectedRoute element={RolesManagement} />} />
-        <Route path='/chats' element={<ProtectedRoute element={Chat} />} />
-        <Route path='/reports' element={<ProtectedRoute element={Reports} />} />
+        <Route path='/user' element={<ProtectedRoute element={UserList} />} />
+        <Route path='/role' element={<ProtectedRoute element={RolesManagement} />} />
+        <Route path='/chat' element={<ProtectedRoute element={Chat} />} />
+        <Route path='/report' element={<ProtectedRoute element={Reports} />} />
         <Route path='/about' element={<ProtectedRoute element={About} />} />
-        <Route path='/settings' element={<ProtectedRoute element={Setting} />} />
-        <Route path='/services' element={<ProtectedRoute element={Services} />} />
+        <Route path='/setting' element={<ProtectedRoute element={Setting} />} />
+        <Route path='/service' element={<ProtectedRoute element={Services} />} />
 
         <Route path='/dashboard/profile' element={<ProtectedRoute element={Profile} />} />
         <Route path='/dashboard/account' element={<ProtectedRoute element={Account} />} />

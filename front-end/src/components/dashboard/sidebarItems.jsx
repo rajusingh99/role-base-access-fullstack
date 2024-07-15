@@ -8,7 +8,6 @@ import { Typography } from "@mui/material";
 
 const SidebarItems = ({ link, navigate, open,index }) => {
     const location = useLocation();
-
     const matchRoute = (path) => {
         return location.pathname === path;
     }

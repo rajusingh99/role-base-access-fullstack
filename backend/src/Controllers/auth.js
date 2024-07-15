@@ -94,7 +94,7 @@ exports.login = async (req, res) => {
             email: user?.email,
             roleId: role? role?._id : null,
             role: role ? role?.name : null,
-            menu: role ? role?.menus : null,
+            menus: role ? role?.menus : null,
           }
 				});
 		} else {

@@ -7,23 +7,23 @@ import HomeRepairServiceIcon from '@mui/icons-material/HomeRepairService';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 export const sidebarLinks = [
-  { id: 1, value: "user", path: "/users", title: "User Management", icon: <PeopleOutlineIcon /> },
+  { id: 1, value: "user", path: "/user", title: "User Management", icon: <PeopleOutlineIcon /> },
   {
     id: 2, value: "role",
-    path: "/roles",
+    path: "/role",
     title: "Role Management",
     icon: <PeopleAltIcon />,
   },
-  { id: 3, value: "chat", path: "/chats", title: "Chats", icon: <ForumIcon /> },
-  { id: 4, value: "report", path: "/reports", title: "Reports", icon: <SummarizeIcon /> },
+  { id: 3, value: "chat", path: "/chat", title: "Chats", icon: <ForumIcon /> },
+  { id: 4, value: "report", path: "/report", title: "Reports", icon: <SummarizeIcon /> },
   { id: 5, value: "about", path: "/about", title: "About", icon: <InfoIcon /> },
   {
     id: 6, value: "setting",
-    path: "/settings",
+    path: "/setting",
     title: "Settings",
     icon: <SettingsIcon />,
   },
-  { id: 7,value:"service", path: "/services", title: "Services", icon: <HomeRepairServiceIcon /> },
+  { id: 7,value:"service", path: "/service", title: "Services", icon: <HomeRepairServiceIcon /> },
 ];
 
 export const settings = [
