@@ -59,13 +59,11 @@ const TopRoutes = ({ route }) => {
       menus: typeof value === 'string' ? value.split(',') : value,
     });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const roleData = {
       ...formData,
     };
-
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post('http://localhost:4000/api/role-create', roleData, {
@@ -76,7 +74,7 @@ const TopRoutes = ({ route }) => {
       });
 
       if (response.status === 200) {
-        navigate('/roles');
+        navigate('/role');
         console.log('Role created successfully:', response.data);
       } else {
         console.error('Failed to create role:', response.data);

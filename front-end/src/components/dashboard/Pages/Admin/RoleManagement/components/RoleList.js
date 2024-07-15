@@ -174,7 +174,6 @@ const RoleList = ({ rows }) => {
             'Authorization': `Bearer ${token}`
           }
         });
-        console.log(response,'response')
         const dataWithId = response.data.roles.map((role) => ({ ...role, id: role._id }));
         setRoles(dataWithId);
         setLoading(false);

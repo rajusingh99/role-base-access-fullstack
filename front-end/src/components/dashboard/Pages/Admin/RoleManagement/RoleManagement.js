@@ -9,12 +9,10 @@ import CopyRight from '../components/CopyRight';
 import RoleList from './components/RoleList';
 
 const RoleManagement = () => {
- 
   const route = {
     title: "Roles",
   };
   
-
   return (
     <Box sx={{ display: 'flex' }}>
       <SideBar />

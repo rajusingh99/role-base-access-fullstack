@@ -1,44 +1,81 @@
 const User = require("../Model/user");
 const Role = require("../Model/role");
-const UserRole = require("../model/userRole");
+const bcrypt = require("bcrypt");
 
-const userData = {
-    firstName: "Super",
-    lastName: "Admin",
-    email: 'superAdmin@gmail.com',
-    password: '12345',
-};
+    const userData = {
+        firstName: "Super",
+        lastName: "Admin",
+        email: 'superAdmin@gmail.com',
+        password: '12345',
+    };
 
-const roleData = {
-    name: "superAdmin",
-    menus: ["about", "user", "report", "service", "chat", "role", "setting"],
-};
+    const superAdminRoleData = {
+        name: "superAdmin",
+        menus: ["about", "user", "report", "service", "chat", "role", "setting"],
+    };
+    const userRoleData = {
+        name: "user",
+        menus: ["about", "report", "service", "chat","setting"],
+    };
 
-const shouldSeedUsers = async () => {
-    const usersCount = await User.countDocuments().exec();
-    return usersCount === 0; 
-};
-
-const seedUsers = async () => {
-    const existingUser = await User.findOne({ email: userData.email }).exec();
-    if (existingUser) {
-        console.log(`User with email ${userData.email} already exists. Skipping creation.`);
-        return existingUser;
+// seeding user role
+    const shouldSeedUserRole = async()=>{
+        const userRole = await Role.find({name:userRoleData.name});
+        return  userRole.length==0
+    }
+    const seedUserRole =async()=>{
+        const userRole = new Role({
+            name: userRoleData.name,
+            menus: userRoleData.menus
+        });
+        const seedUserRole = await userRole.save();
     }
 
-    const existingRole = await Role.findOne({ name: roleData.name }).exec();
-    if (existingRole) {
-        console.log(`Role with name ${roleData.name} already exists. Skipping creation.`);
-        return existingRole;
+// seeding superAdmin role
+    const shouldSeedSuperAdminRole = async()=>{
+        const superAdminRole = await Role.find({name:superAdminRoleData.name});
+        return  superAdminRole.length==0
+    }
+    const seedSuperAdminRole =async()=>{
+        const superAdminRole = new Role({
+            name: superAdminRoleData.name,
+            menus: superAdminRoleData.menus
+        });
+        const seedSuperAdminRole = await superAdminRole.save();
     }
 
-    const role = await Role.create(roleData);
+// seeding superAdmin
+    const shouldSeedUsers = async () => {
+		const users = await User.find().exec();
+        const result = await Promise.all(users.map(async (user) => {
+            const role = await Role.findById(user?.roleId).exec();
+            return {
+                id: user?._id,
+                firstName: user?.firstName,
+                lastName: user?.lastName,
+                email: user?.email,
+                role: role ? role?.name : null,
+                menu: role ? role?.menus : null,
+            };
+        }));
+        const filteredUser = result?.filter((item)=> item.role==superAdminRoleData.name)
+        return filteredUser.length === 0;
+    };
+    const seedUsers = async () => {
+        const hashedPassword = await bcrypt.hash(userData.password, 10);
+		const userRoleId = await Role.findOne({ name:superAdminRoleData.name  }, { _id: 1 });
 
-    const user = await User.create({ ...userData, roleId: role._id });
+        if(userRoleId){
+			const user = new User({
+				firstName:userData.firstName,
+				lastName:userData.lastName,
+				email:userData.email,
+				password: hashedPassword,
+				roleId: userRoleId,
+			});
+			const savedUser = await user.save();
+            console.log(savedUser,"savedUser")
+		}
+    };
 
-    await UserRole.create({ roleId: role._id, userId: user._id });
-
-    return [role, user];
-};
-
-module.exports = { shouldSeedUsers, seedUsers };
+module.exports = { shouldSeedUsers, seedUsers,shouldSeedUserRole,seedUserRole,shouldSeedSuperAdminRole,seedSuperAdminRole };
