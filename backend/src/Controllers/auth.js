@@ -129,33 +129,3 @@ exports.logout = (req, res) => {
 	}
 };
 
-//  profile end points
-
-exports.getProfile = async (req, res) => {
-	try {
-		const { email, password } = req.body;
-
-		// Populate the role field to get role details along with user details
-		const user = await User.findById(userId).populate("role");
-
-		if (!user) {
-			return res.status(404).json({ msg: "User not found" });
-		}
-
-		// Construct the profile data
-		const profileData = {
-			firstName: user.firstName,
-			lastName: user.lastName,
-			email: user.email,
-			role: {
-				name: user.role.name,
-				menus: user.role.menus,
-			},
-		};
-
-		return res.status(200).json({ profile: profileData });
-	} catch (error) {
-		console.error("Error fetching profile:", error);
-		return res.status(500).json({ msg: "Internal server error" });
-	}
-};
