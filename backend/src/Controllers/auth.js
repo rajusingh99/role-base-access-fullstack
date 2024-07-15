@@ -87,13 +87,15 @@ exports.login = async (req, res) => {
 					success: true,
 					token: token,
 					msg: "User Logged In Successfully!",
-					// id: user?._id,
-					// firstName: user?.firstName,
-					// lastName: user?.lastName,
-					// email: user?.email,
-					// roleId: role? role?._id : null,
-					// role: role ? role?.name : null,
-					// menu: role ? role?.menus : null,
+          user : {
+            id: user?._id,
+            firstName: user?.firstName,
+            lastName: user?.lastName,
+            email: user?.email,
+            roleId: role? role?._id : null,
+            role: role ? role?.name : null,
+            menu: role ? role?.menus : null,
+          }
 				});
 		} else {
 			return res.status(401).json({

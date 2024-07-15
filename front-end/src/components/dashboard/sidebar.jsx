@@ -114,15 +114,16 @@ export default function SideBar() {
   const handleCloseUserMenu = async (path) => {
     if (path === "/dashboard/logout") {
       try {
-        const teken = localStorage.getItem("token");
+        const token = localStorage.getItem("token");
         const response = await axios.get("http://localhost:4000/api/logout", {
           headers: {
-            Authorization: `Bearer ${teken}`,
+            Authorization: `Bearer ${token}`,
           },
         });
 
         if (response.data.success) {
           localStorage.removeItem("token");
+          localStorage.removeItem("LoggedInUser");
           navigate("/login");
         } else {
           console.error("Logout failed:", response.data.msg);

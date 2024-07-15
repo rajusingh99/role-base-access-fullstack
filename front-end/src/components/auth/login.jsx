@@ -20,11 +20,12 @@ import axios from "axios";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e, name) => {
     setFormData((prev) => ({
@@ -41,8 +42,11 @@ const Login = () => {
        password: formData.password
       });
       const token = localStorage.setItem("token", response.data.token);
+      const LoggedInUser = response?.data?.user;
+      localStorage.setItem("LoggedInUser",JSON.stringify(LoggedInUser))
+      
       if (response.status === 200) {
-        navigate("/");
+        navigate("/users");
       } else {
         console.error("Login failed:", response.data);
         alert("Login failed: Invalid credentials");
