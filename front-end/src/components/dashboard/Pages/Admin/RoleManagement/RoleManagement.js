@@ -19,7 +19,7 @@ const RoleManagement = () => {
       <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop: "55px" }}>
         <TopRoutes route={route} />
         
-        <RoleList rows={Constant.roleList}/>
+        <RoleList/>
 
         <Box className="flex items-center">
           <CopyRight />

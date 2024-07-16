@@ -28,7 +28,7 @@ function getStyles(name, personName, theme) {
   };
 }
 
-const RoleList = ({ rows }) => {
+const RoleList = () => {
   const theme = useTheme();
   const [editId, setEditId] = useState(null);
   const [editRole, setEditRole] = useState([]);
@@ -86,7 +86,6 @@ const RoleList = ({ rows }) => {
   const handleCancel = () => {
     setEditId(null);
   };
-
   const columns = [
     { field: "_id", headerName: "ID", flex: 1 },
     {

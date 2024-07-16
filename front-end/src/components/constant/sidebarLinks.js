@@ -35,7 +35,7 @@ export const settings = [
 const Service = [
   {
     id: 1,
-    path: "/chats",
+    path: "/chat",
     title: "Chats",
     icon: <ForumIcon />,
     description:
@@ -50,7 +50,7 @@ const Service = [
   },
   {
     id: 3,
-    path: "/reports",
+    path: "/report",
     title: "Reports",
     icon: <SummarizeIcon />,
     description: "Generate reports for the business and security leaders.",
