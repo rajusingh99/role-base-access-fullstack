@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios"; // Import Axios
 import { Constant } from "../constant/sidebarLinks";
 import CopyRight from "../dashboard/Pages/Admin/components/CopyRight";
+import { url } from "../constant/Constant";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/register",
+        `${url}/api/register`,
         formData
       );
       if (response.status === 200) {
@@ -189,7 +190,7 @@ const Signup = () => {
                   textTransform: "capitalize",
                 }}
               >
-                SignUp
+                {loading ? "Signing Up..." : "Sign Up"}
               </Button>
               <Box className="">
                 <Typography className="opacity-50">

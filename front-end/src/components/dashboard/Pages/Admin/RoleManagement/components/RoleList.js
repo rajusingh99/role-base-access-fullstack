@@ -7,6 +7,7 @@ import { useTheme } from '@mui/material/styles';
 import axios from "axios";
 import '../style.css'
 import { sidebarLinks } from "../../../../../constant/sidebarLinks";
+import { url } from "../../../../../constant/Constant";
 
 const ITEM_HEIGHT = 50;
 const ITEM_PADDING_TOP = 10;
@@ -58,7 +59,7 @@ const RoleList = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put(
-        "http://localhost:4000/api/update-role",
+        `${url}/api/update-rol`,
         { id: editId, name: editName, menus: editRole },
         {
           headers: {
@@ -168,7 +169,7 @@ const RoleList = () => {
     const fetchRoleList = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get("http://localhost:4000/api/role-list", {
+        const response = await axios.get(`${url}/api/role-list`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

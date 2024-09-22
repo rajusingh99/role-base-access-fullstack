@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { Constant } from "../constant/sidebarLinks";
 import CopyRight from "../dashboard/Pages/Admin/components/CopyRight";
 import axios from "axios";
+import { url } from "../constant/Constant";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:4000/api/login", {
+      const response = await axios.post(`${url}/api/login`, {
        email  : formData.email,
        password: formData.password
       });

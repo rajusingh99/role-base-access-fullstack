@@ -5,162 +5,161 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 exports.register = async (req, res) => {
-	const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
 
-	try {
-		let user = await User.findOne({ email });
+  try {
+    let user = await User.findOne({ email });
 
-		if (!firstName || !lastName || !email || !password) {
-			return res.status(400).json({ msg: "All Fields are required" });
-		}
-		if (user) {
-			return res.status(400).json({ msg: "User already Registered" });
-		}
+    if (!firstName || !lastName || !email || !password) {
+      return res.status(400).json({ msg: "All Fields are required" });
+    }
+    if (user) {
+      return res.status(400).json({ msg: "User already Registered" });
+    }
 
-		const hashedPassword = await bcrypt.hash(password, 10);
-		const userRoleId = await Role.findOne({ name: "user" }, { _id: 1 });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const userRoleId = await Role.findOne({ name: "user" }, { _id: 1 });
 
-		if(userRoleId){
-			user = new User({
-				firstName,
-				lastName,
-				email,
-				password: hashedPassword,
-				roleId: userRoleId,
-			});
+    if (userRoleId) {
+      user = new User({
+        firstName,
+        lastName,
+        email,
+        password: hashedPassword,
+        roleId: userRoleId,
+      });
 
-			const savedUser = await user.save();
-	
-			if (savedUser) {
-				res.status(200).send("User Registered Successfully!");
-			}
-		}
-		else{
-			res.status(500).send("User role not exist!");
-		}
-	} catch (err) {
-		console.error(err.message);
-		res.status(500).send("Server error");
-	}
+      const savedUser = await user.save();
+
+      if (savedUser) {
+        res.status(200).send("User Registered Successfully!");
+      }
+    } else {
+      res.status(500).send("User role not exist!");
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
 };
 
 // Login endpoint
 exports.login = async (req, res) => {
-	try {
-		const { email, password } = req.body;
-		if (!email || !password) {
-			return res.status(400).json({
-				success: false,
-				msg: "All fields are Required",
-			});
-		}
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        msg: "All fields are Required",
+      });
+    }
 
-		const user = await User.findOne({ email });
+    const user = await User.findOne({ email });
 
-		if (!user) {
-			return res.status(404).json({
-				success: false,
-				msg: "User Not Registered",
-			});
-		}
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        msg: "User Not Registered",
+      });
+    }
 
-		const matchPassword = await bcrypt.compare(password, user.password);
+    const matchPassword = await bcrypt.compare(password, user.password);
 
-		const role = await Role.findById(user?.roleId).exec();
+    const role = await Role.findById(user?.roleId).exec();
 
-		if (matchPassword) {
-			const options = {
-				id: user?._id,
-				firstName: user?.firstName,
-				lastName: user?.lastName,
-				email: user?.email,
-				roleId: role? role?._id : null,
-				role: role ? role?.name : null,
-				menu: role ? role?.menus : null,
-			};
+    if (matchPassword) {
+      const options = {
+        id: user?._id,
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        email: user?.email,
+        roleId: role ? role?._id : null,
+        role: role ? role?.name : null,
+        menu: role ? role?.menus : null,
+      };
 
-			const token = await jwt.sign(options, process.env.JWT_SECRET, {
-				expiresIn: "2d",
-			});
+      const token = await jwt.sign(options, process.env.JWT_SECRET, {
+        expiresIn: "2d",
+      });
 
-			return res
-				.cookie("token", token, {
-					expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-					httpOnly: true,
-				})
-				.json({
-					success: true,
-					token: token,
-					msg: "User Logged In Successfully!",
-          user : {
+      return res
+        .cookie("token", token, {
+          expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 60 * 1000),
+          httpOnly: true,
+        })
+        .json({
+          success: true,
+          token: token,
+          msg: "User Logged In Successfully!",
+          user: {
             id: user?._id,
             firstName: user?.firstName,
             lastName: user?.lastName,
             email: user?.email,
-            roleId: role? role?._id : null,
+            roleId: role ? role?._id : null,
             role: role ? role?.name : null,
             menus: role ? role?.menus : null,
-          }
-				});
-		} else {
-			return res.status(401).json({
-				success: false,
-				msg: "Invalid Credentials",
-			});
-		}
-	} catch (error) {
-		console.error(error);
-		return res.status(500).json({
-			success: false,
-			msg: "Internal Server Error",
-		});
-	}
+          },
+        });
+    } else {
+      return res.status(401).json({
+        success: false,
+        msg: "Invalid Credentials",
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      msg: "Internal Server Error",
+    });
+  }
 };
 
 // Logout endpoint
 exports.logout = (req, res) => {
-	try {
-		res.cookie("token", "", { expires: new Date(0), httpOnly: true });
-		return res.status(200).json({
-			success: true,
-			msg: "User Logged Out Successfully!",
-		});
-	} catch (error) {
-		console.error(error); // Log the error for debugging
-		return res.status(500).json({
-			success: false,
-			msg: "Internal Server Error",
-		});
-	}
+  try {
+    res.cookie("token", "", { expires: new Date(0), httpOnly: true });
+    return res.status(200).json({
+      success: true,
+      msg: "User Logged Out Successfully!",
+    });
+  } catch (error) {
+    console.error(error); // Log the error for debugging
+    return res.status(500).json({
+      success: false,
+      msg: "Internal Server Error",
+    });
+  }
 };
 
 //  profile end points
 
 exports.getProfile = async (req, res) => {
-	try {
-		const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-		// Populate the role field to get role details along with user details
-		const user = await User.findById(userId).populate("role");
+    // Populate the role field to get role details along with user details
+    const user = await User.findById(userId).populate("role");
 
-		if (!user) {
-			return res.status(404).json({ msg: "User not found" });
-		}
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
 
-		// Construct the profile data
-		const profileData = {
-			firstName: user.firstName,
-			lastName: user.lastName,
-			email: user.email,
-			role: {
-				name: user.role.name,
-				menus: user.role.menus,
-			},
-		};
+    // Construct the profile data
+    const profileData = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      role: {
+        name: user.role.name,
+        menus: user.role.menus,
+      },
+    };
 
-		return res.status(200).json({ profile: profileData });
-	} catch (error) {
-		console.error("Error fetching profile:", error);
-		return res.status(500).json({ msg: "Internal server error" });
-	}
+    return res.status(200).json({ profile: profileData });
+  } catch (error) {
+    console.error("Error fetching profile:", error);
+    return res.status(500).json({ msg: "Internal server error" });
+  }
 };

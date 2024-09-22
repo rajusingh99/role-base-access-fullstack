@@ -110,6 +110,9 @@ const rows = [
     },
   ]
   
+  export const url = "https://role-based-coderootz-fullstack.onrender.com"
+
+  // export const url ="http://localhost:4000";
 const Constant ={
     rows,Roles,roleList
 }

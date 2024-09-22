@@ -5,6 +5,7 @@ import { Box, Select, MenuItem, Button, CircularProgress } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import axios from "axios";
+import { url } from "../../../../constant/Constant";
 const Users = () => {
    
   const [editId, setEditId] = useState(null);
@@ -18,7 +19,7 @@ const Users = () => {
     const fetchRoleList = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get("http://localhost:4000/api/role-list", {
+        const response = await axios.get(`${url}/api/role-list`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -39,7 +40,7 @@ const Users = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get("http://localhost:4000/api/user-list", {
+        const response = await axios.get(`${url}/api/user-list`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -81,7 +82,7 @@ const Users = () => {
         const roleId = selectedRole?._id
        
         const response = await axios.put(
-            "http://localhost:4000/api/update-user-role",
+            `${url}/api/update-user-role`,
             { userId: userId, roleId: roleId },
             {
                 headers: {
